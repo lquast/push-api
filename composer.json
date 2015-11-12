@@ -1,0 +1,20 @@
+{
+    "name": "darkluk42/push-api",
+    "description": "Push API",
+    "authors": [
+        {
+            "name": "Lukas Quast",
+            "email": "lukas.quast@ort-online.net"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+      "php": ">=5.3.0",
+      "duccio/apns-php": "dev-master"
+    },
+    "autoload": {
+      "psr-0": {
+        "DarkLuk42": "src/"
+      }
+    }
+}

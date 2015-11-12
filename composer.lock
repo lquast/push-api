@@ -1,0 +1,61 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "abb878c59b42390e252f162a19eee3f0",
+    "content-hash": "75989c5c2cae3c0181636d343a604ba8",
+    "packages": [
+        {
+            "name": "duccio/apns-php",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/immobiliare/ApnsPHP.git",
+                "reference": "e5b7908cdf1d8c8e51caaa1e37af073deb2abcdd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/immobiliare/ApnsPHP/zipball/e5b7908cdf1d8c8e51caaa1e37af073deb2abcdd",
+                "reference": "e5b7908cdf1d8c8e51caaa1e37af073deb2abcdd",
+                "shasum": ""
+            },
+            "require": {
+                "lib-openssl": "*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "ApnsPHP/Autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Apple Push Notification & Feedback Provider",
+            "homepage": "https://github.com/immobiliare/ApnsPHP",
+            "keywords": [
+                "apns",
+                "apple",
+                "notification",
+                "push"
+            ],
+            "time": "2015-09-29 15:48:43"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "duccio/apns-php": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=5.3.0"
+    },
+    "platform-dev": []
+}
