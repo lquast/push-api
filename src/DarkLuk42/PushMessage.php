@@ -2,11 +2,6 @@
 
     namespace DarkLuk42;
 
-    class VoidLogger implements \ApnsPHP_Log_Interface
-    {
-        public function log( $message ){}
-    }
-
     class PushMessage
     {
         const ANDROID_BULK_LIMIT = 10;
