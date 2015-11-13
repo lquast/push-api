@@ -1,6 +1,8 @@
 {
     "name": "darkluk42/push-api",
-    "description": "Push API",
+    "description": "A simple API do send messages to Android and iOS devices.",
+    "keywords": ["Push-Notification","IOS","Android","Device-Token"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Lukas Quast",
