@@ -8,6 +8,8 @@
         const ENVIRONMENT_DEV = "DEV";
         const ENVIRONMENT_PROD = "PROD";
 
+        public static $errorLogger = NULL;
+
         public static function pushAndroid( $apiAccessKey, $devices, $message, $extra = array() )
         {
             $extra = (object)$extra;
@@ -40,8 +42,10 @@
                 'Content-Type: application/json'
             );
 
+            $host = 'https://android.googleapis.com/gcm/send';
+
             $ch = curl_init( );
-            curl_setopt( $ch, CURLOPT_URL, 'https://android.googleapis.com/gcm/send' );
+            curl_setopt( $ch, CURLOPT_URL, $host );
             curl_setopt( $ch, CURLOPT_POST, true );
             curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
             curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
@@ -54,12 +58,13 @@
                 throw new \Exception( curl_error( $ch ) );
             }
 
+            $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close( $ch );
 
             $data = json_decode( $result );
             if( empty( $data ) )
             {
-                throw new \Exception( "Failed to send push notifications." );
+                throw new \Exception( "Failed to send push notifications. HTTP-Status: " . $httpStatus );
             }
 
             if( !empty( $data->error ) )
@@ -70,17 +75,31 @@
             $result = array();
             foreach( $data->results AS $i => $r )
             {
+                if(!empty($r->error))
+                {
+                    self::logError("ANDROID", $devices[$i], $r->error, substr($apiAccessKey, 0, 3) . str_pad("", strlen($apiAccessKey)-6, "*") . substr($apiAccessKey, -3, 3));
+                }
                 $result[$devices[$i]] = empty( $r->error );
             }
 
             return $result;
         }
 
+        public static function logError($os, $device, $error, $auth, $live = null)
+        {
+            $tmp = self::$errorLogger;
+            if(is_callable($tmp))
+            {
+                $tmp($os, $device, $error, $auth, $live);
+            }
+        }
+
         public static function pushIos( $environment, $certFile, $devices, $message, $extra = array() )
         {
             $extra = (object)$extra;
 
-            $push = new \ApnsPHP_Push( $environment == self::ENVIRONMENT_PROD ? \ApnsPHP_Abstract::ENVIRONMENT_PRODUCTION : \ApnsPHP_Abstract::ENVIRONMENT_SANDBOX, $certFile );
+            $environment = $environment == self::ENVIRONMENT_PROD ? \ApnsPHP_Abstract::ENVIRONMENT_PRODUCTION : \ApnsPHP_Abstract::ENVIRONMENT_SANDBOX;
+            $push = new \ApnsPHP_Push( $environment, $certFile );
             $push->setLogger( new VoidLogger() );
             $push->setRootCertificationAuthority( dirname( __FILE__ ) . '/../../data/entrust_root_certification_authority.pem' );
             $push->connect();
@@ -104,6 +123,7 @@
                 }
                 catch(\Exception $e )
                 {
+                    self::logError("iOS", $device, $e->getMessage(), $certFile, $environment == \ApnsPHP_Abstract::ENVIRONMENT_PRODUCTION);
                     $result[$device] = false;
                 }
             }
@@ -120,6 +140,7 @@
                     $m = $error["MESSAGE"];
                     foreach( $m->getRecipients() AS $device )
                     {
+                        self::logError("iOS", $device, $error["ERRORS"][0]["statusMessage"], $certFile, $environment == \ApnsPHP_Abstract::ENVIRONMENT_PRODUCTION);
                         $result[$device] = false;
                     }
                 }
