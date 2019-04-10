@@ -42,7 +42,7 @@
                 'Content-Type: application/json'
             );
 
-            $host = 'https://android.googleapis.com/gcm/send';
+            $host = 'https://fcm.googleapis.com/fcm/send';
 
             $ch = curl_init( );
             curl_setopt( $ch, CURLOPT_URL, $host );
